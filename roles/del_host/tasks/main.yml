@@ -1,0 +1,7 @@
+---
+- name: Delete hosts entry in /etc/hosts
+  lineinfile:
+    dest: /etc/hosts
+    regexp: ".*docker[01].*"
+    state: absent
+  delegate_to: localhost

@@ -1,0 +1,53 @@
+---
+
+- name: Deploy virtual machine 
+  vmware_guest:
+    name: '{{ vm_hostname }}'
+    validate_certs: no
+    datacenter: '{{ vmware_datacenter }}'
+    folder: '{{ vmware_folder }}'
+    guest_id: '{{ vmware_so_id }}'
+    hostname: '{{ vmware_host }}'
+    username: '{{ vmware_user }}'
+    password: '{{ vmware_password }}'
+    cluster: '{{ vmware_cluster }}'
+    #resource_pool: '{{ vmware_rpool }}'
+    annotation: "{{ description }}"
+    state: poweredon
+  
+    hardware:
+      num_cpus: '{{ vm_vcpu }}'
+      memory_mb: '{{ vm_memory }}'
+    
+    disk:
+    - size_gb: 30 
+      type: thin
+      datastore: '{{ vmware_datastore }}'
+    
+    networks:
+    - name: '{{ item.net }}'
+      device_type: vmxnet3
+      ip: '{{ item.ip }}'
+      netmask: '{{ vm_netmask }}'
+      gateway: '{{ item.gw }}'
+      dns_servers:
+      - '{{ vm_dns_server01 }}'
+      - '{{ vm_dns_server02 }}'
+    - vlan: '{{ vm_vlan_id }}'
+      type: static
+    with_items:
+      - { ip: "{{ ip_reserved }}", gw: "{{ vm_gateway }}", net: "{{ vm_network }}" }
+    
+    customization:
+      dns_servers:
+      - '{{ vm_dns_server01 }}'
+      - '{{ vm_dns_server02 }}'
+      domain : '{{ vm_domain_name }}'
+      hostname: '{{ vm_hostname }}'
+    
+    template: '{{ vm_template }}'
+    wait_for_ip_address: yes
+
+  delegate_to: localhost
+  register: deploy_vm
+

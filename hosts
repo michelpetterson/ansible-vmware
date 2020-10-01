@@ -1,0 +1,21 @@
+[docker_hosts]
+docker01 vmware_datastore='vsanDatastore'
+docker02 vmware_datastore='vsanDatastore' 
+docker03 vmware_datastore='vsanDatastore' 
+docker04 vmware_datastore='vsanDatastore' 
+docker05 vmware_datastore='vsanDatastore' 
+docker06 vmware_datastore='vsanDatastore' 
+docker07 vmware_datastore='vsanDatastore' 
+docker08 vmware_datastore='vsanDatastore' 
+docker09 vmware_datastore='vsanDatastore' 
+docker10 vmware_datastore='vsanDatastore' 
+docker11 vmware_datastore='vsanDatastore' 
+docker12 vmware_datastore='vsanDatastore' 
+docker13 vmware_datastore='vsanDatastore' 
+docker14 vmware_datastore='vsanDatastore' 
+docker15 vmware_datastore='vsanDatastore'
+docker16 vmware_datastore='vsanDatastore' 
+
+[docker_hosts:vars]
+ansible_user=michel.peterson
+ansible_port=2131
