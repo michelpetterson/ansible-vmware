@@ -10,15 +10,14 @@
     register: get_result
     delegate_to: localhost
 
-  set_fact:
+- set_fact:
     json_content: "{{ get_result.content | from_json }}"
 
-  set_fact:
+- set_fact:
     vm_hostname: "{{ json_content[0].name }}" 
   
-  set_fact:
+- set_fact:
     hostname_id: "{{ json_content[0].id }}" 
-    
 
 - name: Set name used in namecontroller system api to used
   uri:

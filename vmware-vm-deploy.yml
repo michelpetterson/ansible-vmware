@@ -126,10 +126,10 @@
       when: ( os == "4" )
     
 
-      roles:
-        - { role: ip_reservation }
-        - { role: name_reservation }
-        - { role: vm_deploy }
-        - { role: add_host }
-        - { role: install_teleport }
-        - { role: del_host }
+  roles:
+    - { role: ip_reservation }
+    - { role: name_reservation }
+    - { role: vm_deploy }
+    - { role: add_host }
+    - { role: install_teleport }
+    - { role: del_host }

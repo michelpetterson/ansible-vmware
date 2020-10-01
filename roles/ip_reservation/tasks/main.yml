@@ -13,7 +13,7 @@
   delegate_to: localhost
 
 - set_fact:
-		 token: "{{ ipam_auth.content | from_json | json_query('data.token') }}"
+    ipam_token: "{{ ipam_auth.content | from_json | json_query('data.token') }}"
 
 - name: Reserve ipv4/ipv6 in phpipam
   uri:
@@ -23,7 +23,7 @@
     status_code: [200, 201]
     headers:
       Content-Type: "application/json"
-      token: "{{ token }}"
+      token: "{{ ipam_token }}"
     body_format: json
     body:
       hostname: "{{ vm_hostname }}"
