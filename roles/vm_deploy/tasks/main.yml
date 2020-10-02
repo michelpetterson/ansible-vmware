@@ -20,7 +20,7 @@
       memory_mb: '{{ vm_memory }}'
     
     disk:
-    - size_gb: 30 
+    - size_gb: "{{ vm_disk }}" 
       type: thin
       datastore: '{{ vmware_datastore }}'
     
