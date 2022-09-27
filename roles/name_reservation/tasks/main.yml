@@ -1,0 +1,37 @@
+---
+
+- name: Get name available in namecontroller system api to set in virtual machine
+  uri:
+    url: "{{ nc_url_api }}"
+    method: GET
+    return_content: yes
+    headers:
+      Content-Type: "application/json"
+    register: get_result
+    delegate_to: localhost
+
+  set_fact:
+    json_content: "{{ get_result.content | from_json }}"
+
+  set_fact:
+    vm_hostname: "{{ json_content[0].name }}" 
+  
+  set_fact:
+    hostname_id: "{{ json_content[0].id }}" 
+    
+
+- name: Set name used in namecontroller system api to used
+  uri:
+    url: "{{nc_url_api}}/{{ hostname_id }}"
+    method: PUT
+    return_content: yes
+    body_format: json
+    body:
+      status: Utilizado
+      description: DMZ
+    status_code: [200, 202]
+    headers:
+      Content-Type: "application/json"
+    register: put_result
+    delegate_to: localhost
+

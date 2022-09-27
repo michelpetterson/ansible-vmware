@@ -1,0 +1,26 @@
+# Vmware hypervisor variables
+
+vmware_host: 'portoseguro.intranet.domain.com'
+vmware_user: '{{ user }}'
+vmware_password: '{{ password }}'
+vmware_datacenter: ''
+vmware_folder: '/docker'
+vmware_cluster: 'Producao'
+vmware_rpool: 'Prata'
+
+# Virtual machine variables
+
+vm_netmask: '255.255.255.0'
+vm_memory: '2048'
+vm_vcpu: '1'
+vm_template: 'docker-vm-template'
+
+# NameControl system variables
+
+nc_url_api: 'https://namecontrol-api.domain.com/name'
+
+# PhpIpam variables
+
+ipam_url_api: 'https://phpipam.intranet.domain.com/api/ansible'
+ipam_user: ''
+ipam_password: ''

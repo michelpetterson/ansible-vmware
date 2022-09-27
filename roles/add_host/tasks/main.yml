@@ -1,0 +1,6 @@
+---
+- name: Adding host entry in /etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    line: '{{ vm_ip }}   {{ inventory_hostname }}.intranet.domain.com   {{ inventory_hostname }}' 
+  delegate_to: localhost

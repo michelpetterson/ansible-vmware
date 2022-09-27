@@ -1,0 +1,13 @@
+---
+
+- name: Install teleport package from the internet
+  apt:
+    deb: https://get.gravitational.com/teleport_4.3.5_amd64.deb
+
+- name: Configure teleport
+  become: yes
+  lineinfile:
+    path: /etc/rc.local
+    line: '/usr/local/bin/teleport start --roles=node --token=ba71437cbad0308cc3dbb0816d65fb87bf1ff6f176a08c04 --ca-pin=sha256:d6a65c519bba2ea036b13344b4d848e463785e20eb4d75e27f7833cd7321409e --auth-server=teleport.intranet.domain.com:3025'
+    insertbefore: ^exit 0
+

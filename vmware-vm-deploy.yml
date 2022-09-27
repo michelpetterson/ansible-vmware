@@ -1,0 +1,133 @@
+---
+- hosts: all
+  gather_facts: false
+  become: yes
+
+  vars_prompt:
+
+    - name: user
+      prompt: "\n\n########################################################\n################ VIRTUAL MACHINE DEPLOY ################\n########################################################\n\n=> Digite o nome do usuário para conectar ao Vmware ?\n\nLogin"
+      private: no
+      
+    - name: password
+      prompt: "\n=> Digite a senha para conectar ao Vmware ?\n\nSenha"
+      unsafe: yes
+      private: yes
+
+    - name: owner
+      prompt: "\n=> Quem é o dono do serviço ?\n\nNome"
+      unsafe: yes
+      private: no
+
+    - name: description
+      prompt: "\n=> Digite uma descrição desse serviço ?\n\nDescrição"
+      private: no
+
+    - name: cpu
+      prompt: "\n=> Quantos cores de CPU o servidor deve ter ?\n\n 1) 1 core\n 2) 2 cores\n 3) 4 cores\n 4) 6 cores\n\nOpção"
+      private: no
+
+    - name: memory
+      prompt: "\n=> Quanto de MEMÓRIA o servidor deve ter ?\n\n 1) 1 GB\n 2) 2 GB\n 3) 3 GB\n 4) 4 GB\n\nOpção"
+      private: no
+
+    - name: disk
+      prompt: "\n=> Qual o tamanho do DISCO o servidor deve ter ?\n\n 1) 30 GB\n 2) 40 GB\n 3) 50 GB\n 4) 60 GB\n\nOpção"
+      private: no
+
+    - name: network
+      prompt: "\n=> Qual rede o servidor vai fazer parte ?\n\n 1) ADM\n 2) DMZ\n 3) COLOCATION\n\nOpção"
+      private: no
+
+    - name: os
+      prompt: "\n=> Qual o sistema operacional será usado ?\n\n 1) Debian 8 - x64\n 2) Debian 9 - x64\n 3) Debian 10 - x64\n 4) Windows 2012 - x64\n 5) Windows 2019 - x64\n\nOpção"
+      private: no
+
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: Setting fact adm network
+      set_fact: 
+        ipam_net4_id: '1182'
+        ipam_net6_id: '64'
+        vm_network: 
+          - '1.1.1.0'
+            #- '2801:86:2000:1900::/64'
+        vm_gateway: 
+          - '1.1.1.1'
+            #- '2801:86:2000:1900::1'
+        vm_dns_server01: '1.1.1.153'
+        vm_dns_server02: '1.1.1.159'
+        vm_domain_name: 'intranet.domain.com'
+        vm_vlan: '199'
+      when: ( network == "1" )
+      
+    - name: Setting fact dmz network
+      set_fact: 
+        ipam_net4_id: '1371'
+        ipam_net6_id: '360'
+        vm_network: 
+          - '1.1.56.0'
+            #- '2801:86:2000:1a00::/56'
+        vm_gateway: 
+          - '1.1.56.200'
+            #- '2801:86:2000:1a00::1'
+        vm_dns_server01: '1.1.56.33'
+        vm_dns_server02: '1.1.1.153'
+        vm_domain_name: 'domain.com'
+        vm_vlan: '201'
+      when: ( network == "2" )
+          
+    - name: Setting fact colocation network
+      set_fact: 
+        ipam_net4_id: '21'
+        ipam_net6_id: '1102'
+        vm_network: 
+          - '1.1.51.0'
+            #- '2801:86:2000:1b00::/64'
+        vm_gateway: 
+          - '1.1.51.1'
+            #- '2801:86:2000:1b00::1'
+        vm_dns_server01: '1.1.56.33'
+        vm_dns_server02: '1.1.1.153'
+        vm_domain_name: 'domain.com'
+        vm_vlan: '202'
+      when: ( network == "3" )
+            
+    - name: Setting fact Operating system
+      set_fact: 
+        vmware_so_id: 'debian8_64Guest'
+        ipam_so_id: '27'
+      when: ( os == "1" )
+
+    - name: Setting fact Operating system
+      set_fact: 
+        vmware_so_id: 'debian9_64Guest'
+        ipam_so_id: '44'
+      when: ( os == "2" )
+    
+    - name: Setting fact Operating system
+      set_fact: 
+        vmware_so_id: 'debian10_64Guest'
+        ipam_so_id: '54' 
+      when: ( os == "3" )
+
+    - name: Setting fact Operating system
+      set_fact: 
+        vmware_so_id: 'windows8Server64Guest'
+        ipam_so_id: '39' 
+      when: ( os == "4" )
+
+    - name: Setting fact Operating system
+      set_fact: 
+        vmware_so_id: 'windows9Server64Guest'
+        ipam_so_id: '55'
+      when: ( os == "4" )
+    
+
+        roles:
+          - { role: vm_deploy }
+          - { role: add_host }
+          - { role: install_teleport }
+          - { role: del_host }

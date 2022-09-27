@@ -1,0 +1,26 @@
+# Vmware hypervisor variables
+
+vmware_host: 'put vmware hypervisor or vcenter here'
+vmware_user: '{{ user }}'
+vmware_password: '{{ password }}'
+vmware_datacenter: 'put vmware datacenter name here'
+vmware_folder: 'put vm folder here'
+vmware_cluster: 'put vmware cluster name here'
+vmware_rpool: 'put vmware resource pool here'
+
+# Virtual machine variables
+
+vm_netmask: '255.255.255.0'
+vm_memory: '2048'
+vm_vcpu: '1'
+vm_template: 'put virtual machine template here'
+
+# NameControl system to name servers 
+
+nc_url_api: 'put url here'
+
+# PhpIpam variables
+
+ipam_url_api: 'put url here'
+ipam_user: 'put user name here'
+ipam_password: 'put password here'

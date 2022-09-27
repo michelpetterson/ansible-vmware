@@ -1,0 +1,45 @@
+---
+
+- name: Authenticate in phpipam
+  uri:
+    url: "{{ ipam_url_api }}/user"
+    user: "{{ ipam_user }}"
+    password: "{{ ipam_password }}"
+    method: POST
+    return_content: yes
+    headers:
+      Content-Type: "application/json"
+  register: ipam_auth
+  delegate_to: localhost
+
+- set_fact:
+		 token: "{{ ipam_auth.content | from_json | json_query('data.token') }}"
+
+- name: Reserve ipv4/ipv6 in phpipam
+  uri:
+    url: "{{ ipam_url_api }}/addresses/first_free/"
+    method: POST
+    return_content: yes
+    status_code: [200, 201]
+    headers:
+      Content-Type: "application/json"
+      token: "{{ token }}"
+    body_format: json
+    body:
+      hostname: "{{ vm_hostname }}"
+      owner: "{{ owner }}"
+      subnetId: "{{ item }}"
+      description: "{{ service_desc }}"
+      location: "1"
+      deviceId: "{{ ipam_dev_id }}"
+    loop:
+      - "{{ ipam_net4_id }}"
+      - "{{ ipam_net6_id }}"
+
+  register: ipam_reservation
+  delegate_to: localhost
+
+- set_fact:
+    ips_reserved: "{{ ip_reserved }} + [ '{{ item.content | from_json | json_query('data') }}' ]"
+  loop: "{{ ipam_reservation.results }}"
+
